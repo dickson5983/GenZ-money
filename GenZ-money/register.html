@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GenZ Money - Register</title>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+  <h2>Register - KES 80</h2>
+  <input type="email" id="email" placeholder="Email" /><br><br>
+  <button onclick="pay()">Pay & Register</button>
+
+  <script>
+    function pay() {
+      const email = document.getElementById("email").value;
+      if (!email) return alert("Email required");
+
+      let handler = PaystackPop.setup({
+        key: 'pk_live_170d64a2ef9a487becb9e3e7e892c7f9fd3b0306',
+        email: email,
+        amount: 8000,
+        currency: "KES",
+        callback: function(response) {
+          // Call your Supabase signup function here
+          alert("Payment successful! Complete registration in backend.");
+        },
+        onClose: function() {
+          alert("Payment window closed.");
+        }
+      });
+      handler.openIframe();
+    }
+  </script>
+</body>
+</html>

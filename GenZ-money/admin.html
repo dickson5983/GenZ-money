@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - GenZ Money</title>
+  <style>
+    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+    h2 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background: #333; color: white; }
+    tr:nth-child(even) { background: #eee; }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel - View Users</h2>
+  <table id="userTable">
+    <tr><th>Email</th><th>Main Wallet</th><th>Blog</th><th>Meme</th><th>Ads</th><th>Referrals</th></tr>
+  </table>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    const supabase = createClient(
+      'https://jfdotsvfxtqrwcmpramg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmZG90c3ZmeHRxcndjbXByYW1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMDQ1MzIsImV4cCI6MjA2MzY4MDUzMn0.TkiD437ReQ8xc7J8wCB68oOZdxqPU-ltvuFAzAF5ypY'
+    );
+
+    async function loadUsers() {
+      const { data: users, error } = await supabase.from('users').select('*');
+      if (error) return alert('Error loading users: ' + error.message);
+
+      const table = document.getElementById('userTable');
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.email}</td>
+          <td>KES ${user.main_wallet || 0}</td>
+          <td>KES ${user.blog_wallet || 0}</td>
+          <td>KES ${user.meme_wallet || 0}</td>
+          <td>KES ${user.ads_wallet || 0}</td>
+          <td>${user.referrals || 0}</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

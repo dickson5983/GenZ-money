@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GenZ Money Dashboard</title>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    .wallet, .withdraw-section { margin: 2rem 0; }
+    .btn { padding: 10px 20px; background-color: #28a745; color: #fff; border: none; cursor: pointer; }
+    .btn:hover { background-color: #218838; }
+  </style>
+</head>
+<body>
+
+<h2>Welcome to GenZ Money</h2>
+
+<div class="wallet">
+  <h3>Main Wallet: KES <span id="wallet-balance">0</span></h3>
+</div>
+
+<div class="withdraw-section">
+  <h3>Withdraw Funds</h3>
+  <input type="text" id="user-email" placeholder="Enter your email" />
+  <input type="number" id="withdraw-amount" placeholder="Amount (KES)" />
+  <button class="btn" onclick="payWithPaystack()">Withdraw via Paystack</button>
+</div>
+
+<script>
+function payWithPaystack() {
+  let email = document.getElementById("user-email").value;
+  let amount = document.getElementById("withdraw-amount").value;
+
+  if (!email || !amount) {
+    alert("Please enter both email and amount");
+    return;
+  }
+
+  let handler = PaystackPop.setup({
+    key: 'pk_live_170d64a2ef9a487becb9e3e7e892c7f9fd3b0306',
+    email: email,
+    amount: amount * 100, // Paystack uses kobo (KES * 100)
+    currency: 'KES',
+    ref: 'GENZ_' + Math.floor((Math.random() * 1000000000) + 1),
+    callback: function(response) {
+      alert('Payment complete! Reference: ' + response.reference);
+    },
+    onClose: function() {
+      alert('Transaction was not completed, window closed.');
+    }
+  });
+  handler.openIframe();
+}
+</script>
+
+</body>
+</html>
